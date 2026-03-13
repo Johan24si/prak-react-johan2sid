@@ -1,0 +1,100 @@
+/* Import font premium */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Background halaman */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* Background mewah */
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    background-size: 400% 400%;
+    animation: gradientMove 12s ease infinite;
+}
+
+/* Animasi background */
+@keyframes gradientMove {
+    0% {background-position:0% 50%;}
+    50% {background-position:100% 50%;}
+    100% {background-position:0% 50%;}
+}
+
+/* Card utama */
+.card {
+    max-width: 650px;
+    width: 100%;
+    padding: 40px;
+    border-radius: 20px;
+
+    /* Efek kaca (glassmorphism) */
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255,255,255,0.2);
+
+    /* Shadow premium */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+
+    transition: all 0.4s ease;
+}
+
+/* Hover efek elegan */
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+
+/* Judul */
+h1 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 10px;
+
+    /* Gradient text */
+    background: linear-gradient(90deg,#00f2fe,#4facfe,#00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    letter-spacing: 1px;
+}
+
+/* Paragraf */
+p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #e0e0e0;
+    text-align: justify;
+}
+
+/* Garis pemisah */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right,transparent,#00c6ff,transparent);
+    margin: 25px 0;
+}
+
+/* Tulisan kecil */
+small {
+    display: block;
+    text-align: center;
+    color: #ccc;
+    font-style: italic;
+    margin-top: 15px;
+}
+
+/* Responsif */
+@media (max-width:600px){
+    .card{
+        padding:25px;
+    }
+
+    h1{
+        font-size:24px;
+    }
+}
