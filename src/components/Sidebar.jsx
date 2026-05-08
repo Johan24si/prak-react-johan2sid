@@ -9,7 +9,10 @@ export default function Sidebar() {
     { id: "dashboard", name: "Dashboard", icon: <AiFillAppstore size={22} />, to: "/" },
     { id: "orders",    name: "Orders",    icon: <TbListDetails size={22} />, to: "/orders" },
     { id: "customers", name: "Customers", icon: <AiFillCustomerService size={22} />, to: "/customers" },
-
+    // Menu Baru untuk Error Testing
+    { id: "err400",    name: "Error 400",  icon: <FaPlus size={20} className="rotate-45" />, to: "/400" },
+    { id: "err401",    name: "Error 401",  icon: <FaPlus size={20} className="rotate-45" />, to: "/401" },
+    { id: "err403",    name: "Error 403",  icon: <FaPlus size={20} className="rotate-45" />, to: "/403" },    
    
 ];
 
