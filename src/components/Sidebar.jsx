@@ -2,13 +2,15 @@ import { NavLink } from "react-router-dom";
 import { AiFillAppstore, AiFillCustomerService } from "react-icons/ai";
 import { TbListDetails } from "react-icons/tb";
 import { FaPlus, FaChevronRight } from "react-icons/fa";
+import { MdWidgets } from "react-icons/md";
 
 export default function Sidebar() {
 
     const menuList = [
-    { id: "dashboard", name: "Dashboard", icon: <AiFillAppstore size={22} />, to: "/" },
-    { id: "orders",    name: "Orders",    icon: <TbListDetails size={22} />, to: "/orders" },
-    { id: "customers", name: "Customers", icon: <AiFillCustomerService size={22} />, to: "/customers" },
+    { id: "dashboard",  name: "Dashboard",   icon: <AiFillAppstore size={22} />,       to: "/" },
+    { id: "orders",     name: "Orders",       icon: <TbListDetails size={22} />,        to: "/orders" },
+    { id: "customers",  name: "Customers",    icon: <AiFillCustomerService size={22} />, to: "/customers" },
+    { id: "components", name: "Components",   icon: <MdWidgets size={22} />,            to: "/components" },
     // Menu Baru untuk Error Testing
     { id: "err400",    name: "Error 400",  icon: <FaPlus size={20} className="rotate-45" />, to: "/400" },
     { id: "err401",    name: "Error 401",  icon: <FaPlus size={20} className="rotate-45" />, to: "/401" },

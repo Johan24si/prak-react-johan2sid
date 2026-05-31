@@ -21,6 +21,7 @@ const Login = React.lazy(() => import("./pages/auth/Login"));
 const Register = React.lazy(() => import("./pages/auth/Register"));
 const Forgot = React.lazy(() => import("./pages/auth/Forgot"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const Components = React.lazy(() => import("./pages/Components"));
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
     const location = useLocation();
 
     // cek apakah route valid
-    const validRoutes = ["/", "/orders", "/customers", "/login", "/register", "/forgot"];
+    const validRoutes = ["/", "/orders", "/customers", "/components", "/login", "/register", "/forgot"];
     const isErrorPage = !validRoutes.includes(location.pathname);
 
     // 👉 kalau error → tampil full screen TANPA sidebar
@@ -43,6 +44,7 @@ function App() {
                         <Route path="/" element={<Dashboard searchTerm={searchTerm} />} />
                         <Route path="/orders" element={<Orders />} />
                         <Route path="/customers" element={<Customers />} />
+                        <Route path="/components" element={<Components />} />
                         <Route path="/400" element={
                             <NotFound 
                                 code="400" 
