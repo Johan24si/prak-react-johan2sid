@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./assets/tailwind.css";
 
 import React, { Suspense } from "react";
@@ -22,30 +22,15 @@ const Components    = React.lazy(() => import("./pages/Components"));
 const Login         = React.lazy(() => import("./pages/auth/Login"));
 const Register      = React.lazy(() => import("./pages/auth/Register"));
 const Forgot        = React.lazy(() => import("./pages/auth/Forgot"));
+const FiturXYZ      = React.lazy(() => import("./pages/fitur-xyz"));
 
 function App() {
     const [searchTerm, setSearchTerm] = useState("");
-    const location = useLocation();
-
-    // Deteksi rute dinamis agar tidak terjebak error handler
-    const isProdukDetail = location.pathname.startsWith("/products/");
-
-    const validRoutes = [
-        "/", "/orders", "/customers",
-        "/produk", "/components",
-        "/login", "/register", "/forgot",
-        "/400", "/401", "/403",
-    ];
-
-    const isErrorPage = !validRoutes.includes(location.pathname) && !isProdukDetail;
-
-    if (isErrorPage) {
-        return <NotFound />;
-    }
 
     return (
         <Suspense fallback={<Loading />}>
             <Routes>
+                {/* Semua rute di dalam MainLayouts */}
                 <Route element={<MainLayouts />}>
                     <Route path="/"             element={<Dashboard searchTerm={searchTerm} />} />
                     <Route path="/orders"       element={<Orders />} />
@@ -53,7 +38,10 @@ function App() {
                     <Route path="/produk"       element={<Produk />} />
                     <Route path="/products/:id" element={<ProductDetail />} />
                     <Route path="/components"   element={<Components />} />
+                    
+                    <Route path="/fitur-xyz"    element={<FiturXYZ />} />
 
+                    {/* Halaman Error Statis */}
                     <Route path="/400" element={
                         <NotFound code="400" title="Bad Request"
                             description="Permintaan tidak valid (Bad Request)."
@@ -70,9 +58,11 @@ function App() {
                             imageUrl="https://cdn-icons-png.flaticon.com/512/3855/3855833.png" />
                     } />
 
+                    {/* JIKA URL TIDAK COCOK DENGAN DI ATAS, OTOMATIS MASUK SINI */}
                     <Route path="*" element={<NotFound />} />
                 </Route>
 
+                {/* Semua rute di dalam AuthLayout */}
                 <Route element={<AuthLayout />}>
                     <Route path="/login"    element={<Login />} />
                     <Route path="/register" element={<Register />} />
