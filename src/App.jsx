@@ -23,6 +23,7 @@ const Login         = React.lazy(() => import("./pages/auth/Login"));
 const Register      = React.lazy(() => import("./pages/auth/Register"));
 const Forgot        = React.lazy(() => import("./pages/auth/Forgot"));
 const FiturXYZ      = React.lazy(() => import("./pages/fitur-xyz"));
+const Note          = React.lazy(() => import("./pages/Note")); // 1. Menambahkan lazy import untuk Note
 
 function App() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -40,6 +41,9 @@ function App() {
                     <Route path="/components"   element={<Components />} />
                     
                     <Route path="/fitur-xyz"    element={<FiturXYZ />} />
+                    
+                    {/* 2. Menambahkan Rute untuk halaman Notes */}
+                    <Route path="/notes"        element={<Note />} />
 
                     {/* Halaman Error Statis */}
                     <Route path="/400" element={

@@ -7,18 +7,20 @@ import { MdWidgets } from "react-icons/md";
 export default function Sidebar() {
 
    const menuList = [
-    { id: "dashboard",  name: "Dashboard",   icon: <AiFillAppstore size={22} />,       to: "/" },
-    { id: "orders",     name: "Orders",      icon: <TbListDetails size={22} />,        to: "/orders" },
-    { id: "customers",  name: "Customers",    icon: <AiFillCustomerService size={22} />, to: "/customers" },
-    { id: "components", name: "Components",   icon: <MdWidgets size={22} />,            to: "/components" },
-    
-    // SESUAIKAN BARIS INI (Ganti /FiturXYZ menjadi /fitur-xyz)
-    { id: "fitur-xyz",  name: "Fitur XYZ",   icon: <AiFillAppstore size={22} />,       to: "/fitur-xyz" },
-    
-    { id: "err400",     name: "Error 400",   icon: <FaPlus size={20} className="rotate-45" />, to: "/400" },
-    { id: "err401",     name: "Error 401",   icon: <FaPlus size={20} className="rotate-45" />, to: "/401" },
-    { id: "err403",     name: "Error 403",   icon: <FaPlus size={20} className="rotate-45" />, to: "/403" },   
-   
+  { id: "dashboard",  name: "Dashboard",   icon: <AiFillAppstore size={22} />,      to: "/" },
+  { id: "orders",     name: "Orders",      icon: <TbListDetails size={22} />,        to: "/orders" },
+  { id: "customers",  name: "Customers",    icon: <AiFillCustomerService size={22} />, to: "/customers" },
+  { id: "components", name: "Components",   icon: <MdWidgets size={22} />,            to: "/components" },
+  
+  // SESUAIKAN BARIS INI (Ganti /FiturXYZ menjadi /fitur-xyz)
+  { id: "fitur-xyz",  name: "Fitur XYZ",   icon: <AiFillAppstore size={22} />,      to: "/fitur-xyz" },
+  
+  // Menu Notes yang baru ditambahkan
+  { id: "notes",      name: "Notes",       icon: <MdWidgets size={22} />,            to: "/notes" },
+  
+  { id: "err400",     name: "Error 400",   icon: <FaPlus size={20} className="rotate-45" />, to: "/400" },
+  { id: "err401",     name: "Error 401",   icon: <FaPlus size={20} className="rotate-45" />, to: "/401" },
+  { id: "err403",     name: "Error 403",   icon: <FaPlus size={20} className="rotate-45" />, to: "/403" },   
 ];
 
     // ✅ menuClass disesuaikan dengan class baru
