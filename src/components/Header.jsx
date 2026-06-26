@@ -1,12 +1,15 @@
 import { useState } from "react";
-// PASTIKAN SEMUA ICON INI SUDAH DI IMPORT
 import { FaBell, FaSearch } from "react-icons/fa";
 import { FcAreaChart } from "react-icons/fc";
 import { SlSettings } from "react-icons/sl";
-import { HiOutlineLightningBolt } from "react-icons/hi"; // <--- INI SERING TERLUPA
+import { HiOutlineLightningBolt } from "react-icons/hi";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Header({ searchTerm, setSearchTerm }) {
     const [showModal, setShowModal] = useState(false);
+    const { profile, signOut } = useAuth();
+
+    const displayName = profile?.full_name || "Pengguna";
 
     return (
         <>
@@ -16,7 +19,7 @@ export default function Header({ searchTerm, setSearchTerm }) {
                 <div className="relative w-full max-w-lg group">
                     <input
                         onClick={() => setShowModal(true)}
-                        readOnly // Biar user ngetiknya di dalam modal
+                        readOnly
                         type="text"
                         placeholder="Cari sesuatu..."
                         className="border border-gray-100 p-2 pr-10 bg-gray-50 w-full rounded-xl outline-none cursor-pointer hover:bg-white transition-all"
@@ -24,7 +27,7 @@ export default function Header({ searchTerm, setSearchTerm }) {
                     <FaSearch className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300" />
                 </div>
 
-                {/* Icons tetap */}
+                {/* Icons */}
                 <div className="flex items-center space-x-4 ml-4">
                     <div className="relative p-3 bg-blue-50 rounded-2xl text-blue-500">
                         <FaBell />
@@ -41,15 +44,25 @@ export default function Header({ searchTerm, setSearchTerm }) {
                         <SlSettings />
                     </div>
 
-                    <div className="flex items-center space-x-4 border-l pl-4 border-gray-300">
-                        <span className="hidden md:inline text-sm">
-                            Hello, <span className="font-bold">Muhammad Johan</span>
+                    <div className="flex items-center space-x-3 border-l pl-4 border-gray-300">
+                        <span className="hidden md:flex flex-col text-sm">
+                            <span>Hello, <span className="font-bold">{displayName}</span></span>
+                            {profile?.role && (
+                                <span className="text-[10px] text-gray-400 capitalize">{profile.role}</span>
+                            )}
                         </span>
                         <img
                             src="https://cdn-icons-png.flaticon.com/512/4140/4140037.png"
-                            className="w-10 h-10 rounded-full border-2 border-white shadow-sm"
+                            className="w-10 h-10 rounded-full border-2 border-white shadow-sm cursor-pointer"
                             alt="avatar"
                         />
+                        <button
+                            onClick={signOut}
+                            title="Logout"
+                            className="hidden md:flex text-xs font-bold text-gray-400 hover:text-red-500 transition-colors px-2 py-1 rounded-lg hover:bg-red-50"
+                        >
+                            Keluar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -72,8 +85,8 @@ export default function Header({ searchTerm, setSearchTerm }) {
                             <input
                                 autoFocus
                                 type="text"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)} // Update state di main.jsx
+                                value={searchTerm || ""}
+                                onChange={(e) => setSearchTerm && setSearchTerm(e.target.value)}
                                 placeholder="Ketik nama makanan, pelanggan, atau ID..."
                                 className="w-full bg-gray-50 border-2 border-gray-100 p-4 rounded-2xl text-lg outline-none focus:border-blue-500 transition-all"
                             />
@@ -96,4 +109,4 @@ export default function Header({ searchTerm, setSearchTerm }) {
             )}
         </>
     );
-}
+}

@@ -1,12 +1,13 @@
-import axios from "axios"
 import { useState } from "react"
 import { BsFillExclamationDiamondFill } from "react-icons/bs"
 import { ImSpinner2 } from "react-icons/im"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
+import { useAuth } from "../../contexts/AuthContext"
+import { supabase } from "../../lib/supabase"
 
 export default function Login() {
-    /* navigate, state & handleChange*/
     const navigate = useNavigate()
+    const { signIn } = useAuth()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     const [dataForm, setDataForm] = useState({
@@ -22,40 +23,40 @@ export default function Login() {
         });
     };
 
-    /* process form */
     const handleSubmit = async (e) => {
         e.preventDefault()
-
         setLoading(true)
-        setError(false)
+        setError("")
 
-        axios
-            .post("https://dummyjson.com/user/login", {
-                username: dataForm.email,
-                password: dataForm.password,
-            })
-            .then((response) => {
-                // Jika status bukan 200, tampilkan pesan error
-                if (response.status !== 200) {
-                    setError(response.data.message);
-                    return;
-                }
+        const { data, error: authError } = await signIn(dataForm.email, dataForm.password)
 
-                // Redirect ke dashboard jika login sukses
-                navigate("/");
-            })
-            .catch((err) => {
-                if (err.response) {
-                    setError(err.response.data.message || "An error occurred");
-                } else {
-                    setError(err.message || "An unknown error occurred");
-                }
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        if (authError) {
+            setError(authError.message || "Email atau password salah.")
+            setLoading(false)
+            return
+        }
+
+        // Fetch role dari profiles untuk menentukan tujuan redirect
+        const userId = data?.user?.id
+        if (userId) {
+            const { data: profileData } = await supabase
+                .from("profiles")
+                .select("role")
+                .eq("id", userId)
+                .single()
+
+            if (profileData?.role === "member") {
+                navigate("/member", { replace: true })
+            } else {
+                navigate("/", { replace: true })
+            }
+        } else {
+            navigate("/", { replace: true })
+        }
+
+        setLoading(false)
     };
-    /* error & loading status */
+
     const errorInfo = error ? (
         <div className="bg-red-200 mb-5 p-5 text-sm font-light text-gray-600 rounded flex items-center">
             <BsFillExclamationDiamondFill className="text-red-600 me-2 text-lg" />
@@ -86,8 +87,10 @@ export default function Login() {
                     <input
                         name="email"
                         onChange={handleChange}
-                        type="text"
+                        type="email"
                         id="email"
+                        value={dataForm.email}
+                        required
                         className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
                             placeholder-gray-400"
                         placeholder="you@example.com"
@@ -102,6 +105,8 @@ export default function Login() {
                         onChange={handleChange}
                         type="password"
                         id="password"
+                        value={dataForm.password}
+                        required
                         className="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm
                             placeholder-gray-400"
                         placeholder="********"
@@ -109,12 +114,19 @@ export default function Login() {
                 </div>
                 <button
                     type="submit"
+                    disabled={loading}
                     className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4
-                        rounded-lg transition duration-300"
+                        rounded-lg transition duration-300 disabled:opacity-60"
                 >
                     Login
                 </button>
             </form>
+            <p className="text-center text-sm text-gray-500 mt-4">
+                Belum punya akun?{" "}
+                <Link to="/register" className="text-green-600 font-semibold hover:underline">
+                    Daftar di sini
+                </Link>
+            </p>
         </div>
     )
 }

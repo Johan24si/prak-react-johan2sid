@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { FaShoppingBag, FaWallet, FaUsers } from "react-icons/fa";
 import { HiOutlineArrowRight, HiOutlineLightningBolt } from "react-icons/hi";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Dashboard({ searchTerm = "" }) {
     const [selected, setSelected] = useState(null);
+    const { profile } = useAuth();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (profile?.role === "member") {
+            navigate("/member", { replace: true });
+        }
+    }, [profile, navigate]);
 
     const recentOrders = [
         { id: "#EX-9921", item: "Wagyu Steak Signature", customer: "Budi Santoso", status: "Selesai", price: "Rp 1.250.000", img: "https://i.pravatar.cc/150?u=a" },

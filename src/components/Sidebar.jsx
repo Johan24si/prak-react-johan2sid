@@ -1,35 +1,40 @@
 import { NavLink } from "react-router-dom";
 import { AiFillAppstore, AiFillCustomerService } from "react-icons/ai";
 import { TbListDetails } from "react-icons/tb";
-import { FaPlus, FaChevronRight } from "react-icons/fa";
+import { FaChevronRight, FaUsers } from "react-icons/fa";
 import { MdWidgets } from "react-icons/md";
+import { HiOutlineShoppingBag } from "react-icons/hi";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Sidebar() {
+    const { profile, isAdmin, signOut } = useAuth();
 
-   const menuList = [
-  { id: "dashboard",  name: "Dashboard",   icon: <AiFillAppstore size={22} />,      to: "/" },
-  { id: "orders",     name: "Orders",      icon: <TbListDetails size={22} />,        to: "/orders" },
-  { id: "customers",  name: "Customers",    icon: <AiFillCustomerService size={22} />, to: "/customers" },
-  { id: "components", name: "Components",   icon: <MdWidgets size={22} />,            to: "/components" },
-  
-  // SESUAIKAN BARIS INI (Ganti /FiturXYZ menjadi /fitur-xyz)
-  { id: "fitur-xyz",  name: "Fitur XYZ",   icon: <AiFillAppstore size={22} />,      to: "/fitur-xyz" },
-  
-  // Menu Notes yang baru ditambahkan
-  { id: "notes",      name: "Notes",       icon: <MdWidgets size={22} />,            to: "/notes" },
-  
-  { id: "err400",     name: "Error 400",   icon: <FaPlus size={20} className="rotate-45" />, to: "/400" },
-  { id: "err401",     name: "Error 401",   icon: <FaPlus size={20} className="rotate-45" />, to: "/401" },
-  { id: "err403",     name: "Error 403",   icon: <FaPlus size={20} className="rotate-45" />, to: "/403" },   
-];
+    const allMenus = [
+        // Menu Admin/Staff
+        { id: "dashboard",  name: "Dashboard",        icon: <AiFillAppstore size={22} />,       to: "/",          roles: ["admin", "staff"] },
+        { id: "orders",     name: "Orders",            icon: <HiOutlineShoppingBag size={22} />, to: "/orders",    roles: ["admin", "staff"] },
+        { id: "customers",  name: "Customers",         icon: <AiFillCustomerService size={22} />, to: "/customers", roles: ["admin", "staff"] },
+        { id: "produk",     name: "Produk",            icon: <MdWidgets size={22} />,            to: "/produk",    roles: ["admin", "staff"] },
+        { id: "users",      name: "Manajemen User",    icon: <FaUsers size={20} />,              to: "/users",     roles: ["admin"] },
+        { id: "notes",      name: "Notes",             icon: <TbListDetails size={22} />,        to: "/notes",     roles: ["admin", "staff"] },
+        
+        // Menu Member
+        { id: "member-dash",  name: "Loyalty Dashboard",  icon: <AiFillAppstore size={22} />,       to: "/member",          roles: ["member"] },
+        { id: "member-orders",name: "Riwayat Belanja",    icon: <HiOutlineShoppingBag size={22} />, to: "/member/orders",   roles: ["member"] },
+    ];
 
-    // ✅ menuClass disesuaikan dengan class baru
+    const currentRole = profile?.role || "staff";
+    const menuList = allMenus.filter(m => m.roles.includes(currentRole));
+
     const menuClass = ({ isActive }) =>
         `flex cursor-pointer items-center rounded-xl p-4 space-x-2
         ${isActive
             ? "text-hijau bg-green-200 font-extrabold"
             : "text-gray-600 hover:text-hijau hover:bg-green-200 hover:font-extrabold"
         }`;
+
+    const displayName = profile?.full_name || "Pengguna";
+    const roleLabel = profile?.role === "admin" ? "Administrator" : profile?.role === "member" ? "Pelanggan VIP" : "Staff";
 
     return (
         <div className="w-72 bg-[#F8F9FA] min-h-screen flex flex-col justify-between border-r border-gray-200/60 p-4 sticky top-0 h-screen">
@@ -56,7 +61,7 @@ export default function Sidebar() {
                     <ul className="space-y-2">
                         {menuList.map((item) => (
                             <li key={item.id}>
-                                <NavLink to={item.to} className={menuClass}>
+                                <NavLink to={item.to} end={item.to === "/"} className={menuClass}>
                                     {({ isActive }) => (
                                         <>
                                             <div className="flex items-center gap-4 z-10">
@@ -98,12 +103,14 @@ export default function Sidebar() {
                     </div>
 
                     <div className="mt-10">
-                        <h4 className="font-bold text-gray-800 text-sm">Organize Menus</h4>
-                        <p className="text-[11px] text-gray-400 mt-1 mb-5">Update your restaurant <br/>list in seconds.</p>
+                        <h4 className="font-bold text-gray-800 text-sm">{displayName}</h4>
+                        <p className="text-[11px] text-gray-400 mt-1 mb-5">{roleLabel}</p>
                         
-                        <button className="group w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-green-600 text-white text-[11px] font-bold py-3 rounded-2xl transition-all duration-300 active:scale-95">
-                            <FaPlus className="group-hover:rotate-90 transition-transform" />
-                            ADD NEW MENU
+                        <button
+                            onClick={signOut}
+                            className="group w-full flex items-center justify-center gap-2 bg-gray-900 hover:bg-red-600 text-white text-[11px] font-bold py-3 rounded-2xl transition-all duration-300 active:scale-95"
+                        >
+                            Keluar
                         </button>
                     </div>
                 </div>

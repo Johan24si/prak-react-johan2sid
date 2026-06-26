@@ -4,6 +4,7 @@ import "./assets/tailwind.css";
 
 import React, { Suspense } from "react";
 import Loading from "./components/Loading";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Layouts
 const MainLayouts = React.lazy(() => import("./layouts/MainLayouts"));
@@ -13,17 +14,22 @@ const AuthLayout  = React.lazy(() => import("./layouts/AuthLayout"));
 const NotFound = React.lazy(() => import("./components/NotFound"));
 
 // Pages
-const Dashboard     = React.lazy(() => import("./pages/Dashboard"));
-const Orders        = React.lazy(() => import("./pages/Orders"));
-const Customers     = React.lazy(() => import("./pages/Customers"));
-const Produk        = React.lazy(() => import("./pages/Produk"));
-const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
-const Components    = React.lazy(() => import("./pages/Components"));
-const Login         = React.lazy(() => import("./pages/auth/Login"));
-const Register      = React.lazy(() => import("./pages/auth/Register"));
-const Forgot        = React.lazy(() => import("./pages/auth/Forgot"));
-const FiturXYZ      = React.lazy(() => import("./pages/fitur-xyz"));
-const Note          = React.lazy(() => import("./pages/Note")); // 1. Menambahkan lazy import untuk Note
+const Dashboard      = React.lazy(() => import("./pages/Dashboard"));
+const Orders         = React.lazy(() => import("./pages/Orders"));
+const Customers      = React.lazy(() => import("./pages/Customers"));
+const CustomerDetail = React.lazy(() => import("./pages/CustomerDetail"));
+const Produk         = React.lazy(() => import("./pages/Produk"));
+const ProductDetail  = React.lazy(() => import("./pages/ProductDetail"));
+const Components     = React.lazy(() => import("./pages/Components"));
+const UserManagement = React.lazy(() => import("./pages/UserManagement"));
+const Login          = React.lazy(() => import("./pages/auth/Login"));
+const Register       = React.lazy(() => import("./pages/auth/Register"));
+const Forgot         = React.lazy(() => import("./pages/auth/Forgot"));
+const Note           = React.lazy(() => import("./pages/Note"));
+
+// Member Pages
+const MemberDashboard = React.lazy(() => import("./pages/member/MemberDashboard"));
+const MemberOrders    = React.lazy(() => import("./pages/member/MemberOrders"));
 
 function App() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -31,19 +37,26 @@ function App() {
     return (
         <Suspense fallback={<Loading />}>
             <Routes>
-                {/* Semua rute di dalam MainLayouts */}
-                <Route element={<MainLayouts />}>
-                    <Route path="/"             element={<Dashboard searchTerm={searchTerm} />} />
-                    <Route path="/orders"       element={<Orders />} />
-                    <Route path="/customers"    element={<Customers />} />
-                    <Route path="/produk"       element={<Produk />} />
-                    <Route path="/products/:id" element={<ProductDetail />} />
-                    <Route path="/components"   element={<Components />} />
+                {/* Semua rute di dalam MainLayouts — dilindungi ProtectedRoute */}
+                <Route element={
+                    <ProtectedRoute>
+                        <MainLayouts searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                    </ProtectedRoute>
+                }>
+                    {/* Admin/Staff Routes */}
+                    <Route path="/"                element={<Dashboard searchTerm={searchTerm} />} />
+                    <Route path="/orders"          element={<Orders />} />
+                    <Route path="/customers"       element={<Customers />} />
+                    <Route path="/customers/:id"   element={<CustomerDetail />} />
+                    <Route path="/produk"          element={<Produk />} />
+                    <Route path="/products/:id"    element={<ProductDetail />} />
+                    <Route path="/users"           element={<UserManagement />} />
+                    <Route path="/components"      element={<Components />} />
+                    <Route path="/notes"           element={<Note />} />
                     
-                    <Route path="/fitur-xyz"    element={<FiturXYZ />} />
-                    
-                    {/* 2. Menambahkan Rute untuk halaman Notes */}
-                    <Route path="/notes"        element={<Note />} />
+                    {/* Member Routes */}
+                    <Route path="/member"          element={<MemberDashboard />} />
+                    <Route path="/member/orders"   element={<MemberOrders />} />
 
                     {/* Halaman Error Statis */}
                     <Route path="/400" element={
@@ -62,7 +75,6 @@ function App() {
                             imageUrl="https://cdn-icons-png.flaticon.com/512/3855/3855833.png" />
                     } />
 
-                    {/* JIKA URL TIDAK COCOK DENGAN DI ATAS, OTOMATIS MASUK SINI */}
                     <Route path="*" element={<NotFound />} />
                 </Route>
 
@@ -77,4 +89,4 @@ function App() {
     );
 }
 
-export default App;
+export default App;
